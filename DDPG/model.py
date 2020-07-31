@@ -5,13 +5,21 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 def hidden_init(layer):
+    """Initialize hidden layers's parameters.
+    Params
+    ======
+        layer:hidden layer
+    """
     fan_in = layer.weight.data.size()[0]
     lim = 1. / np.sqrt(fan_in)
     return (-lim, lim)
 
 class Actor(nn.Module):
-    """Actor (Policy) Model."""
-
+    """Actor (Policy) Model.
+        Params
+        ======
+        nn.Module:torch's Neural Networks module
+    """
     def __init__(self, state_size, action_size, seed, fc1_units=400, fc2_units=300):
         """Initialize parameters and build model.
         Params
@@ -23,7 +31,7 @@ class Actor(nn.Module):
             fc2_units (int): Number of nodes in second hidden layer
         """
         super(Actor, self).__init__()
-        self.seed = torch.manual_seed(seed)
+        torch.manual_seed(seed)
         self.fc1 = nn.Linear(state_size, fc1_units)
         self.fc2 = nn.Linear(fc1_units, fc2_units)
         self.fc3 = nn.Linear(fc2_units, action_size)
@@ -31,6 +39,11 @@ class Actor(nn.Module):
         self.bn1 = nn.BatchNorm1d(fc1_units)
 
     def reset_parameters(self):
+        """Reset Actor all layers's parameters.
+        Params
+        ======
+
+        """        
         self.fc1.weight.data.uniform_(*hidden_init(self.fc1))
         self.fc2.weight.data.uniform_(*hidden_init(self.fc2))
         self.fc3.weight.data.uniform_(-3e-3, 3e-3)
@@ -50,7 +63,7 @@ class Actor(nn.Module):
 class Critic(nn.Module):
     """Critic (Value) Model."""
 
-    def __init__(self, state_size, action_size, seed, fcs1_units=400, fc2_units=300): ## chang fcs from 400 to 64
+    def __init__(self, state_size, action_size, seed, fcs1_units=400, fc2_units=300): 
         """Initialize parameters and build model.
         Params
         ======
@@ -61,7 +74,7 @@ class Critic(nn.Module):
             fc2_units (int): Number of nodes in the second hidden layer
         """
         super(Critic, self).__init__()
-        self.seed = torch.manual_seed(seed)
+        torch.manual_seed(seed)
         self.fcs1 = nn.Linear(state_size, fcs1_units)
         self.fc2 = nn.Linear(fcs1_units+action_size, fc2_units)
         self.fc3 = nn.Linear(fc2_units, 1)
@@ -69,6 +82,11 @@ class Critic(nn.Module):
         self.bn1 = nn.BatchNorm1d(fcs1_units)
 
     def reset_parameters(self):
+        """Reset Critic all layers's parameters.
+        Params
+        ======
+
+        """         
         self.fcs1.weight.data.uniform_(*hidden_init(self.fcs1))
         self.fc2.weight.data.uniform_(*hidden_init(self.fc2))
         self.fc3.weight.data.uniform_(-3e-3, 3e-3)
