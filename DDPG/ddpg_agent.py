@@ -17,9 +17,6 @@ LR_ACTOR = 1e-3         # learning rate of the actor
 LR_CRITIC = 1e-4        # learning rate of the critic
 WEIGHT_DECAY = 0        # L2 weight decay
 
-EPSILON = 1.0           # explore->exploit noise process added to act step
-EPSILON_DECAY = 1e-6    # decay rate for noise process
-
 LEARN_EVERY = 40        # learning timestep interval
 LEARN_NUM = 20          # number of learning passes
 
@@ -39,7 +36,7 @@ class Agent():
         """
         self.state_size = state_size
         self.action_size = action_size
-        self.seed = random.seed(random_seed)
+        random.seed(random_seed)
 
         # Actor Network (w/ Target Network)
         self.actor_local = Actor(state_size, action_size, random_seed).to(device)
@@ -53,7 +50,7 @@ class Agent():
 
         # Noise process
         self.noise = OUNoise(action_size, random_seed)
-        self.epsilon = EPSILON
+       
         
         # Replay memory
         self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, random_seed)
@@ -68,9 +65,7 @@ class Agent():
             for _ in range(LEARN_NUM):
                 experiences = self.memory.sample()
                 self.learn(experiences, GAMMA)
-            # changed by kun
-            #experiences = self.memory.sample()
-            #self.learn(experiences, GAMMA)
+
 
     def act(self, state, add_noise=True):
         """Returns actions for given state as per current policy."""
@@ -80,10 +75,11 @@ class Agent():
             action = self.actor_local(state).cpu().data.numpy()
         self.actor_local.train()
         if add_noise:
-            action += self.epsilon * self.noise.sample()
+            action += self.noise.sample()
         return np.clip(action, -1, 1)
 
     def reset(self):
+        """Reset the internal state (= noise) to mean (mu)."""
         self.noise.reset()
 
     def learn(self, experiences, gamma):
@@ -127,7 +123,6 @@ class Agent():
         self.soft_update(self.actor_local, self.actor_target, TAU)    
         
         # ---------------------------- update noise ---------------------------- # added by kun
-        self.epsilon -= EPSILON_DECAY
         self.noise.reset()
 
     def soft_update(self, local_model, target_model, tau):
@@ -150,7 +145,7 @@ class OUNoise:
         self.mu = mu * np.ones(size)
         self.theta = theta
         self.sigma = sigma
-        self.seed = random.seed(seed)
+        random.seed(seed)
         self.reset()
 
     def reset(self):
@@ -160,7 +155,7 @@ class OUNoise:
     def sample(self):
         """Update internal state and return it as a noise sample."""
         x = self.state
-        dx = self.theta * (self.mu - x) + self.sigma * np.array([random.random() for i in range(len(x))])
+        dx = self.sigma * np.random.randn(len(x)) + self.theta * (self.mu - x)
         self.state = x + dx
         return self.state
 
@@ -178,7 +173,7 @@ class ReplayBuffer:
         self.memory = deque(maxlen=buffer_size)  # internal memory (deque)
         self.batch_size = batch_size
         self.experience = namedtuple("Experience", field_names=["state", "action", "reward", "next_state", "done"])
-        self.seed = random.seed(seed)
+        random.seed(seed)
     
     def add(self, state, action, reward, next_state, done):
         """Add a new experience to memory."""
