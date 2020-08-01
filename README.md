@@ -13,9 +13,14 @@ entry in the action vector should be a number between -1 and 1. For the purpose 
 For this project, you will work with the [Reacher](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#reacher) environment.
 
 The steps below will describe how to setup and train a **single agent** version in Unity environment.
-All step run in the udacity project's workspace:
+
 
 ### Getting Started
+#### Requirement installation
+- [Unity ML-Agents](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Installation.md)
+- [NumPy](http://www.numpy.org/)
+- pip install -r requirement.txt
+
 
 1. Download the environment from one of the links below.  You need only select the environment that matches your operating system:
 
@@ -27,9 +32,10 @@ All step run in the udacity project's workspace:
 
     (_For Windows users_) Check out [this link](https://support.microsoft.com/en-us/help/827218/how-to-determine-whether-a-computer-is-running-a-32-bit-version-or-64) if you need help with determining if your computer is running a 32-bit version or 64-bit version of the Windows operating system.
 
-    (_For AWS_) If you'd like to train the agent on AWS (and have not [enabled a virtual screen](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Training-on-Amazon-Web-Service.md)), then please use [this link](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/one_agent/Reacher_Linux_NoVis.zip) (version 1) or [this link](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Linux_NoVis.zip) (version 2) to obtain the "headless" version of the environment.  You will **not** be able to watch the agent without enabling a virtual screen, but you will be able to train the agent.  (_To watch the agent, you should follow the instructions to [enable a virtual screen](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Training-on-Amazon-Web-Service.md), and then download the environment for the **Linux** operating system above._)
 
-2. Place the file in the DRLND GitHub repository, in the `p2_continuous-control/` folder, and unzip (or decompress) the file. 
+2. get code from github [link](https://github.com/davincizhao/Continuous_Control_reacher)
+
+3. Run "jupyter notebook Continuous_Control.ipynb"
 
 ### Instructions
 
